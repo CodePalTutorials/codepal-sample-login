@@ -1,0 +1,12 @@
+venv
+*.pyc
+staticfiles
+.env
+
+
+db.sqlite3
+__pycache__
+local_settings.py
+
+# IntelliJ files
+.idea

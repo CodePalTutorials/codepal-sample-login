@@ -1,0 +1,14 @@
+appdirs==1.4.3
+dj-database-url==0.4.1
+Django==1.10.4
+djangorestframework==3.6.2
+djangorestframework-jwt==1.10.0
+facebook-sdk==2.0.0
+gunicorn==19.6.0
+packaging==16.8
+psycopg2==2.6.2
+PyJWT==1.4.2
+pyparsing==2.2.0
+requests==2.13.0
+six==1.10.0
+whitenoise==3.2
