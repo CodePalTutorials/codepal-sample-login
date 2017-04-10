@@ -2,7 +2,8 @@
  * Created by shivam on 4/8/17.
  */
 
-var facebookAppId = '283099212117626';
+var facebookAppId = '282341848860029';
+var facebookAppIdTest = '283099212117626';
 
 /* Initializes facebook SDk.
 * */
