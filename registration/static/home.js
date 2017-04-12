@@ -64,10 +64,12 @@ function loginFacebook() {
 
 
         jqxhr.done(function(data, textStatus, jqXHR) {
+            //user registration successfull. Do something.
             toastr.success('Logged In successfully!', 'Success')
         });
 
         jqxhr.fail(function(jqXHR, textStatus, errorThrown) {
+             //user registration failed. Do something.
             toastr.error('Please try again', 'Login Failed!')
         });
 

@@ -2,13 +2,9 @@ import facebook
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.http import JsonResponse
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import APIException
-from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.settings import api_settings
 
