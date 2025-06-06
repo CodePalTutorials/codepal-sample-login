@@ -13,26 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.views.generic import TemplateView
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from registration.views import register_user_via_facebook, get_user_details
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    re_path(r'^admin/', admin.site.urls),
 
-    url(r'^api-token-auth/', obtain_jwt_token),
+    re_path(r'^api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 
     # Url for facebook signup
-    url(r'^api/v1/user/register/facebook', register_user_via_facebook),
+    re_path(r'^api/v1/user/register/facebook', register_user_via_facebook),
 
     # Url to fetch user details
-    url(r'^api/v1/user/get/account', get_user_details),
+    re_path(r'^api/v1/user/get/account', get_user_details),
 
 
 
 
-    url(r'^$', TemplateView.as_view(template_name='home.html')),
+    re_path(r'^$', TemplateView.as_view(template_name='home.html')),
 ]
