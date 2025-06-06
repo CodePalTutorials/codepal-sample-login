@@ -6,9 +6,9 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings # To access SIMPLE_JWT settings
 
-from my_project.settings import JWT_AUTH_COOKIE, JWT_EXPIRATION_DELTA
 from registration.models import FbAuth
 
 
@@ -33,13 +33,25 @@ def register_user_via_facebook(request):
     FbAuth.create_or_update(user, data['userID'], data['accessToken'])
 
     #   Step 3: Return JWT token in cookie.
-
-    payload = api_settings.JWT_PAYLOAD_HANDLER(user)
-    token = api_settings.JWT_ENCODE_HANDLER(payload)
+    refresh = RefreshToken.for_user(user)
+    access_token = str(refresh.access_token)
 
     # Step 4: Set token as cookie
-    response = JsonResponse({'token': token}, safe=False, status=status.HTTP_200_OK)
-    response.set_cookie(JWT_AUTH_COOKIE, token, JWT_EXPIRATION_DELTA.total_seconds(), httponly=True)
+    response = JsonResponse({'token': access_token}, safe=False, status=status.HTTP_200_OK)
+
+    # Use a generic cookie name, can be configured in settings if needed
+    auth_cookie_name = getattr(settings, 'SIMPLE_JWT', {}).get('AUTH_COOKIE', 'jwt_auth_token')
+    # Use access token lifetime from settings
+    access_token_lifetime = getattr(settings, 'SIMPLE_JWT', {}).get('ACCESS_TOKEN_LIFETIME')
+
+    if access_token_lifetime:
+        response.set_cookie(
+            auth_cookie_name,
+            access_token,
+            max_age=access_token_lifetime.total_seconds(),
+            httponly=True,
+            samesite=getattr(settings, 'SIMPLE_JWT', {}).get('AUTH_COOKIE_SAMESITE', 'Lax') # Add SameSite attribute
+        )
 
     return response
 

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'registration'
 ]
 
@@ -140,18 +141,46 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Rest framework permissions
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
 # JWT Settings
 # For JWT, define an auth cookie name
-JWT_AUTH_COOKIE = 'jwt_auth_token'
+# JWT_AUTH_COOKIE = 'jwt_auth_token' # No longer used by simplejwt
 # Set when token expires.
-JWT_EXPIRATION_DELTA = datetime.timedelta(days=60)
+# JWT_EXPIRATION_DELTA = datetime.timedelta(days=60) # Configure SIMPLE_JWT settings instead
 
-JWT_AUTH = {'JWT_AUTH_COOKIE': JWT_AUTH_COOKIE,
-            'JWT_EXPIRATION_DELTA': JWT_EXPIRATION_DELTA
+# JWT_AUTH = {'JWT_AUTH_COOKIE': JWT_AUTH_COOKIE, # No longer used by simplejwt
+#             'JWT_EXPIRATION_DELTA': JWT_EXPIRATION_DELTA
+# }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=60),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1), # Example, adjust as needed
+    'ROTATE_REFRESH_TOKENS': False, # Example, adjust as needed
+    'BLACKLIST_AFTER_ROTATION': True, # Example, adjust as needed
+    'UPDATE_LAST_LOGIN': False, # Example, adjust as needed
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': datetime.timedelta(minutes=5), # Example, adjust as needed
+    'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(days=1), # Example, adjust as needed
 }
 
 
